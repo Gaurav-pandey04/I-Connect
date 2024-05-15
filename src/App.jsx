@@ -66,7 +66,7 @@ function ParticipantView(props) {
   }, [micStream, micOn]);
 
   return (
-    <div>
+    <div className="vid">
       <p>
         Participant: {displayName} | Webcam: {webcamOn ? "ON" : "OFF"} | Mic:{" "}
         {micOn ? "ON" : "OFF"}
@@ -91,7 +91,7 @@ function ParticipantView(props) {
           }}
         />
       )}
-    </div>
+  </div>
   );
 }
 
@@ -138,21 +138,24 @@ function MeetingView(props) {
   };
 
   return (
-    <div className="container">
-      <h3 className="meetId">Meeting Id: {props.meetingId}</h3>
+    <div className="min">
+      <h3 className="meetId container">Meeting Id: {props.meetingId}</h3>
       {joined && joined == "JOINED" ? (
-        <div>
+        <div className="cont">
           <Controls props={props.meetingId}/>
           {/* //For rendering all the participants in the meeting */}
+          <div className="invideo">
           {[...participants.keys()].map((participantId) => (
             <ParticipantView
               participantId={participantId}
               key={participantId}
+              className = 'inVideo'
             />
           ))}
+          </div>
         </div>
       ) : joined && joined == "JOINING" ? (
-        <p>Joining the meeting...</p>
+        <p className="msg">Joining the meeting...</p>
       ) : (
         <div className="btn-align">
         <button className="btn" onClick={joinMeeting}>Join</button>
@@ -189,7 +192,7 @@ function App() {
       token={authToken}
       className = 'main'
     >
-      <MeetingView meetingId={meetingId} onMeetingLeave={onMeetingLeave} />
+      <MeetingView  meetingId={meetingId} onMeetingLeave={onMeetingLeave} />
     </MeetingProvider>
   ) : (
     <JoinScreen getMeetingAndToken={getMeetingAndToken} />

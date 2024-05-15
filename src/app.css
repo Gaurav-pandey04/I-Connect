@@ -22,6 +22,14 @@
     font-size: 28px;
 }
 
+.min .btn-align{
+    width: 100vw;
+    margin: auto;
+    position: absolute;
+    top: 14%;
+    justify-content: center;
+}
+
 .btn{
     font-size: 18px;
     padding: 5px;
@@ -47,6 +55,14 @@
     left: 40%;
 }
 
+.cont{
+    position: absolute;
+    top: 15%;
+    /* left: 27%; */
+    width: 100vw;
+    margin: auto;
+}
+
 .container .btn{
     min-width: 55px;
 }
@@ -70,4 +86,23 @@
 
 img{
     width: 25px;
+}
+
+.msg{
+    font-size: 15px;
+    text-align: center;
+    position: absolute;
+    top: 12%;
+    width: 100vw;
+    margin: auto;
+}
+
+.invideo{
+    display: flex;
+    justify-content: center;
+    margin-top: 55px;
+}
+
+.vid{
+    margin: 0 25px;
 }
