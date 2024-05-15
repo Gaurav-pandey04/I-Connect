@@ -4,6 +4,7 @@ import mute from './mute.png'
 import webcam from './webcam.png'
 import off from './off.png'
 import copy from './copy.png'
+import video from './video-call.png'
 
 export const assets = {
     logout, 
@@ -11,5 +12,6 @@ export const assets = {
     mute, 
     webcam,
     off,
-    copy
+    copy, 
+    video
 }

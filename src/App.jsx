@@ -10,27 +10,39 @@ import ReactPlayer from "react-player";
 import './app.css'
 import { assets } from "./assets/asstes";
 
+
 function JoinScreen({ getMeetingAndToken }) {
   const [meetingId, setMeetingId] = useState(null);
   const onClick = async () => {
-    await getMeetingAndToken(meetingId);
+    if (meetingId == null){
+      alert("Please enter meeting Id!")
+    }else{
+      await getMeetingAndToken(meetingId);
+    }
   };
+  const onClickb = async () => {
+      await getMeetingAndToken(meetingId);
+    }
   return (
+    <>
+    <img src={assets.video} alt="" className="main-img"/><br /><br /><br /><br />
+    <h1 className="heading">I-Connect</h1>
     <div className="main-align">
       <input
         type="text"
         placeholder="Enter Meeting Id"
         className="inpValue"
         onChange={(e) => {
-          setMeetingId(e.target.value);
+            setMeetingId(e.target.value);
         }}
       />
       <div  className="btn-align">
       <button onClick={onClick} className="btn">Join</button>
       {" or "}
-      <button onClick={onClick} className="btn">Create Meeting</button>
+      <button onClick={onClickb} className="btn">Create Meeting</button>
       </div>
     </div>
+    </>
   );
 }
 
@@ -167,6 +179,22 @@ function MeetingView(props) {
 }
 
 function App() {
+  const [name, setName] = useState(null);
+  useEffect(()=>{
+    window.onload = function(){
+      const n = prompt("Enter your name ?");
+      console.log(n);
+      setName(n);
+    }
+
+    return ()=>{
+      window.onload = null;
+    };
+  }, []);
+
+  console.log(name);
+
+
   const [meetingId, setMeetingId] = useState(null);
 
   //Getting the meeting id by calling the api we just wrote
@@ -187,7 +215,7 @@ function App() {
         meetingId,
         micEnabled: true,
         webcamEnabled: true,
-        name: "C.V. Raman",
+        name: `${name}`,
       }}
       token={authToken}
       className = 'main'
