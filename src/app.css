@@ -1,0 +1,73 @@
+.main {
+    height: 100vh;
+    width: 98vw;
+    position: relative;
+}
+
+.main-align {
+    display: block;
+    position: absolute;
+    top: 35%;
+    left: 33%;
+}
+
+.btn-align {
+    /* width: 100vw; */
+    display: block;
+    /* margin: auto; */
+    padding: 5px;
+    margin: 10px 2px;
+    display: flex;
+    justify-content: space-around;
+    font-size: 28px;
+}
+
+.btn{
+    font-size: 18px;
+    padding: 5px;
+    margin: 0 5px;
+    cursor: pointer;
+}
+
+.inpValue {
+    font-size: 18px;
+    padding: 5px;
+    margin: 5px;
+    border: 2px solid black;
+    width: 500px;
+    display: block;
+    /* margin: auto; */
+}
+
+.container{
+    display: flex;
+    flex-direction: column;
+    position: absolute;
+    top: 5%;
+    left: 40%;
+}
+
+.container .btn{
+    min-width: 55px;
+}
+
+.meetId{
+    font-size: 28px;
+    margin: 5px;
+}
+
+.btn-controls{
+    display: flex;
+    justify-content: center;
+    margin: 20px 0;
+}
+
+.btn-controls .btn{
+    outline: none;
+    border: none;
+    background: none;
+}
+
+img{
+    width: 25px;
+}
