@@ -8,39 +8,58 @@ import { authToken, createMeeting } from "./Api";
 import ReactPlayer from "react-player";
 import './main.css'
 import { assets } from "../../assets/asstes";
-
+import { Firebase } from '../Login/Firebase'
+import { getAuth, signOut } from "firebase/auth";
 
 function JoinScreen({ getMeetingAndToken }) {
   const [meetingId, setMeetingId] = useState(null);
   const onClick = async () => {
-    if (meetingId == null){
+    if (meetingId == null) {
       alert("Please enter meeting Id!")
-    }else{
+    } else {
       await getMeetingAndToken(meetingId);
     }
   };
   const onClickb = async () => {
-      await getMeetingAndToken(meetingId);
-    }
+    await getMeetingAndToken(meetingId);
+  }
+
+  const auth = getAuth(Firebase.app);
+
+  const signout = () => {
+    let conf = confirm("Do you want to Sign Out?");
+    console.log(conf);
+    conf ?
+      signOut(auth)
+      .then(() => {
+        alert("Sign-out successful.");
+      }).catch((error) => {
+        // An error happened.
+      }) : null;
+  }
+
   return (
     <>
-    <img src={assets.video} alt="" className="main-img"/><br /><br /><br /><br />
-    <h1 className="heading">I-Connect</h1>
-    <div className="main-align">
-      <input
-        type="text"
-        placeholder="Enter Meeting Id"
-        className="inpValue"
-        onChange={(e) => {
+      <img src={assets.video} alt="" className="main-img" id="headingImg" /><br /><br /><br /><br />
+      <h1 className="heading">I-Connect</h1>
+      <button className="btn signout" onClick={signout}>
+        <img src={assets.out} alt="" />
+      </button>
+      <div className="main-align">
+        <input
+          type="text"
+          placeholder="Enter Meeting Id"
+          className="inpValue"
+          onChange={(e) => {
             setMeetingId(e.target.value);
-        }}
-      />
-      <div  className="btn-align">
-      <button onClick={onClick} className="btn">Join</button>
-      {" or "}
-      <button onClick={onClickb} className="btn">Create Meeting</button>
+          }}
+        />
+        <div className="btn-align">
+          <button onClick={onClick} className="btn">Join</button>
+          {" or "}
+          <button onClick={onClickb} className="btn">Create Meeting</button>
+        </div>
       </div>
-    </div>
     </>
   );
 }
@@ -102,11 +121,11 @@ function ParticipantView(props) {
           }}
         />
       )}
-  </div>
+    </div>
   );
 }
 
-function Controls({props}) {
+function Controls({ props }) {
   const { leave, toggleMic, toggleWebcam } = useMeeting();
   const [ismic, setIsMic] = useState(true);
   const [iscam, setIsCam] = useState(true);
@@ -117,13 +136,13 @@ function Controls({props}) {
         <img src={assets.logout} alt="" />
       </button>
       <button className="btn" onClick={() => toggleMic()}>
-        <img src={ismic ? assets.mic : assets.mute} alt="" onClick={()=> setIsMic(!ismic)}/>
+        <img src={ismic ? assets.mic : assets.mute} alt="" onClick={() => setIsMic(!ismic)} />
       </button>
       <button className="btn" onClick={() => toggleWebcam()}>
-        <img src={iscam ? assets.webcam : assets.off} alt="" onClick={()=> setIsCam(!iscam)}/>
+        <img src={iscam ? assets.webcam : assets.off} alt="" onClick={() => setIsCam(!iscam)} />
       </button>
-      <button className="btn" onClick={()=>{navigator.clipboard.writeText(props)}}>
-      <img src={assets.copy} alt="" />
+      <button className="btn" onClick={() => { navigator.clipboard.writeText(props) }}>
+        <img src={assets.copy} alt="" />
       </button>
     </div>
   );
@@ -153,24 +172,24 @@ function MeetingView(props) {
       <h3 className="meetId container">Meeting Id: {props.meetingId}</h3>
       {joined && joined == "JOINED" ? (
         <div className="cont">
-          <Controls props={props.meetingId}/>
+          <Controls props={props.meetingId} />
           {/* //For rendering all the participants in the meeting */}
           <div className="invideo">
-          {[...participants.keys()].map((participantId) => (
-            <ParticipantView
-              participantId={participantId}
-              key={participantId}
-              className = 'inVideo'
-            />
-          ))}
+            {[...participants.keys()].map((participantId) => (
+              <ParticipantView
+                participantId={participantId}
+                key={participantId}
+                className='inVideo'
+              />
+            ))}
           </div>
         </div>
       ) : joined && joined == "JOINING" ? (
         <p className="msg">Joining the meeting...</p>
       ) : (
         <div className="btn-align">
-        <button className="btn" onClick={joinMeeting}>Join</button>
-        <button className="btn" onClick={()=>{navigator.clipboard.writeText(props.meetingId)}}>Copy Meeting Id</button>
+          <button className="btn" onClick={joinMeeting}>Join</button>
+          <button className="btn" onClick={() => { navigator.clipboard.writeText(props.meetingId) }}>Copy Meeting Id</button>
         </div>
       )}
     </div>
@@ -179,15 +198,16 @@ function MeetingView(props) {
 
 function Main() {
   const [name, setName] = useState(null);
-  useEffect(()=>{
-    window.onload = function(){
+  useEffect(() => {
+    const headingImg = document.getElementById('headingImg');
+    headingImg.onload = function () {
       const n = prompt("Enter your name ?");
       // console.log(n);
       setName(n);
     }
 
-    return ()=>{
-      window.onload = null;
+    return () => {
+      headingImg.onload = null;
     };
   }, []);
 
@@ -217,9 +237,9 @@ function Main() {
         name: `${name}`,
       }}
       token={authToken}
-      className = 'main'
+      className='main'
     >
-      <MeetingView  meetingId={meetingId} onMeetingLeave={onMeetingLeave} />
+      <MeetingView meetingId={meetingId} onMeetingLeave={onMeetingLeave} />
     </MeetingProvider>
   ) : (
     <JoinScreen getMeetingAndToken={getMeetingAndToken} />

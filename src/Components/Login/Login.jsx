@@ -1,9 +1,9 @@
 import React, { useState } from 'react'
 import { assets } from '../../assets/asstes'
 import { Firebase } from './Firebase'
-import { getAuth, createUserWithEmailAndPassword, signInWithEmailAndPassword, onAuthStateChanged  } from "firebase/auth";
+import { getAuth, createUserWithEmailAndPassword, signInWithEmailAndPassword, onAuthStateChanged, GoogleAuthProvider, signInWithPopup } from "firebase/auth";
 
-const Login = ({onLogin}) => {
+const Login = ({ onLogin }) => {
     const style = {
         color: 'black'
     }
@@ -15,7 +15,17 @@ const Login = ({onLogin}) => {
         alignItems: 'center'
     }
 
+    const widthStyle = {
+        width: '92px',
+        height: '85px'
+    }
+
     const auth = getAuth(Firebase.app);
+    const provider = new GoogleAuthProvider();
+    provider.addScope('https://www.googleapis.com/auth/contacts.readonly');
+    provider.setCustomParameters({
+        'login_hint': 'user@example.com'
+    });
 
 
     const formSignUp = (e) => {
@@ -53,7 +63,7 @@ const Login = ({onLogin}) => {
                         onLogin(true);
                         // ...
                     } else {
-                        alert('User is signed out');
+                        // alert('User is signed out');
                         onLogin(false);
                         // ...
                     }
@@ -67,11 +77,36 @@ const Login = ({onLogin}) => {
             });
     }
 
+    const googleSignIn = (e) => {
+        e.preventDefault();
+        signInWithPopup(auth, provider)
+            .then((result) => {
+                // This gives you a Google Access Token. You can use it to access the Google API.
+                const credential = GoogleAuthProvider.credentialFromResult(result);
+                const token = credential.accessToken;
+                // The signed-in user info.
+                const user = result.user;
+                onLogin(true)
+                // IdP data available using getAdditionalUserInfo(result)
+                // ...
+            }).catch((error) => {
+                // Handle Errors here.
+                const errorCode = error.code;
+                const errorMessage = error.message;
+                // The email of the user's account used.
+                const email = error.customData.email;
+                // The AuthCredential type that was used.
+                const credential = GoogleAuthProvider.credentialFromError(error);
+                alert(errorCode, errorMessage, email, credential)
+                // ...
+            });
+    }
+
     return (
         <div className="d-flex align-items-center py-4">
             <main className="form-signin w-100 m-auto">
                 <form style={styleClass}>
-                    <img className="mb-4" src={assets.video} alt="" width="72" height="80" />
+                    <img className="mb-4" src={assets.video} alt="" width="92" height="80" style={widthStyle} />
                     <h1 className="h3 mb-3 fw-normal">Please sign in</h1>
 
                     <div className="form-floating mt-4">
@@ -83,17 +118,15 @@ const Login = ({onLogin}) => {
                         <label htmlFor="floatingPassword" style={style}>Password</label>
                     </div>
 
-                    {/* <div className="form-check text-start my-3">
-                        <input className="form-check-input" type="checkbox" value="remember-me" id="flexCheckDefault" />
-                        <label className="form-check-label" htmlFor="flexCheckDefault">
-                            Remember me
-                        </label>
-                    </div> */}
-                    <div className='d-flex'>
-                        <button className="btn btn-primary w-10 m-5  py-2" onClick={formSignUp}>Sign up</button>
-                        <button className="btn btn-primary w-10 m-5 py-2" onClick={formSignIn}>Sign in</button>
+                    <div className="form-check text-start">
+                        <button className="btn btn-primary w-10 m-5  py-1" onClick={googleSignIn}>Google
+                        <img src={assets.google} alt="" className='m-1'/></button>
                     </div>
-                    <p className="mt-4 mb-3">© 2017–2024</p>
+                    <div className='d-flex'>
+                        <button className="btn btn-primary w-10 mb-5  py-2" onClick={formSignUp}>Sign up</button>
+                        <button className="btn btn-primary w-10 mb-5 py-2" onClick={formSignIn}>Sign in</button>
+                    </div>
+                    <p className="mt-4 mb-3">©I-connect - 2024</p>
                 </form>
             </main>
         </div>

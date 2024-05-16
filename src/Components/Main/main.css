@@ -91,6 +91,7 @@
 .meetId{
     font-size: 28px;
     margin: 5px;
+    width: 50vw;
 }
 
 .btn-controls{
@@ -126,4 +127,11 @@ img{
 
 .vid{
     margin: 0 25px;
+}
+
+.signout{
+    position: absolute;
+    top: 10px;
+    right: 10px;
+    border: none;
 }

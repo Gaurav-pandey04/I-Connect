@@ -5,6 +5,8 @@ import webcam from './webcam.png'
 import off from './off.png'
 import copy from './copy.png'
 import video from './video-call.png'
+import out from './out.png'
+import google from './google.png'
 
 export const assets = {
     logout, 
@@ -13,5 +15,7 @@ export const assets = {
     webcam,
     off,
     copy, 
-    video
+    video,
+    out,
+    google
 }
